@@ -1,18 +1,18 @@
-source "http://rubygems.org"
+source 'https://rubygems.org'
+ruby '2.2.0'
 
-gem 'sinatra'
-gem 'json'
-gem 'sinatra-contrib', :require => false
-gem 'sinatra-activerecord'
+gem 'bower'
+gem 'cuba'
+gem 'dotenv'
+gem 'foreman'
+gem 'json', '~>1.8.3'
+gem 'puma'
+gem 'thin'
 
 group :development do
-  gem "growl"
-  gem "guard"
-  gem "guard-rspec"
-  gem "shotgun", :require => false
-  gem 'yard-sinatra', :require => false
-end
-
-group :test do
-  gem 'rspec'
+  gem 'httparty'
+  gem 'shotgun'
+  gem "cutest"
+  gem "rack-test"
+  gem "mocoso"
 end

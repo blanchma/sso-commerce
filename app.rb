@@ -1,34 +1,22 @@
-require 'rubygems'
-require 'bundler'
+require "cuba/safe"
+require_relative "lib/always_json"
+require_relative "lib/log_request"
 
-Bundler.require
+Cuba.plugin Cuba::Safe
 
-require "sinatra/base"
-require "sinatra/json"
-require "sinatra/reloader" if development?
+Cuba.use AlwaysJSON
+Cuba.use LogRequest
 
-class App < Sinatra::Base
-  helpers Sinatra::JSON
-  configure :development do
-    register Sinatra::Reloader
+Cuba.define do
+  on get do
+    on "auth" do
+      puts req
+      res.write "Hello world!"
+    end
+
+    on root do
+      puts req.inspect
+      res.write({tute: 1}.to_json)
+    end
   end
-
-  not_found do
-    json "error" => "not Found"
-  end
-
-  def error(code, body)
-    response.body = body
-    halt code, {'Content-Type' => 'application/json'}, { error: body }.to_json
-  end
-
-  get "/" do
-    json message: "Hello API"
-  end
-
-  post '/' do
-    json message: params[:message]
-  end
-
-
 end
