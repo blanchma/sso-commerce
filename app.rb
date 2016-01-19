@@ -1,19 +1,39 @@
 require "erb"
 require "cuba/safe"
 require "cuba/render"
-require_relative "lib/log_request"
+Dir["./lib/**/*.rb"].each { |f| require(f) }
+
 
 Cuba.plugin Cuba::Render
 Cuba.plugin Cuba::Safe
 
+$redis = Redic.new(ENV['REDISCLOUD_URL'])
+$http = HTTPClient.new
+
 #Cuba.use AlwaysJSON
 #Cuba.use LogRequest
+Cuba.use AllowIframe
 
 Cuba.define do
   on get do
     on "auth" do
-      puts req.params["code"]
-      res.headers.delete('X-Frame-Options')
+      puts "/auth?code=#{req.params["code"]}"
+
+      response = $http.post("https://login.bigcommerce.com/oauth2/token",
+                          {client_id: 'cy8d21z8c50wopqadkixm4rbacv5bdp',
+                          client_secret: 'avzqq743oddpq5oe8gz54n66s7yrpma',
+                          code: req.params["code"],
+                          scope: req.params["scope"],
+                          grant_type: 'authorization_code',
+                          redirect_uri: 'https://sso-commerce.herokuapp.com/auth',
+                          context: req.params["context"],
+                    }).body
+
+      puts "BigCommerce Response: #{response}"
+
+      $redis.call("RPUSH", "tokens", response["access_token"])
+      $redis.call("SET", response["id"], response)
+
 
       render("home")
     end
