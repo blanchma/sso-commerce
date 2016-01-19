@@ -8,6 +8,7 @@ gem 'foreman'
 gem 'json', '~>1.8.3'
 gem 'puma'
 gem 'thin'
+gem 'tilt'
 
 group :development do
   gem 'httparty'
