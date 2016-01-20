@@ -1,6 +1,7 @@
 require "erb"
 require "cuba/safe"
 require "cuba/render"
+
 Dir["./lib/**/*.rb"].each { |f| require(f) }
 
 
@@ -35,7 +36,14 @@ Cuba.define do
       $redis.call("SET", response["id"], response)
 
 
-      render("home")
+      render("post-installation", username: response["username"])
+    end
+
+    on "load" do
+      payload = SignedPayload.verify(req.params["signed_payload"], 'avzqq743oddpq5oe8gz54n66s7yrpma') if req.params["signed_payload"]
+      puts payload.inspect
+
+      render("home", payload: payload)
     end
 
     on root do
