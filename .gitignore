@@ -2,3 +2,5 @@
 doc
 .yardoc
 .env
+node_modules
+bundle.js
