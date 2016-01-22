@@ -17,6 +17,10 @@ Cuba.use AllowIframe
 
 Cuba.define do
   on get do
+    on "login" do
+
+      render("slogin")
+    end
     on "auth" do
       puts "/auth?code=#{req.params["code"]}"
 
