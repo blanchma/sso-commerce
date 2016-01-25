@@ -216,6 +216,9 @@
             return !1
         },
         post = function(a, b) {
+            console.log('post')
+            console.log(a)
+            console.log(b)
             var c = document.createElement("form");
             c.setAttribute("method",
                 "post");
@@ -233,6 +236,8 @@
         },
         onReceiveMessage = function(a) {
             a = a.data;
+            console.log('onReceiveMessage');
+            console.log(a);
             if ("social-login" == a.source) {
                 var b = a.action;
                 "post" === b ? post(a.url, a.parameters) : "redirect" === b ? window.location.href = a.url : "alert" === b && alert(a.content)

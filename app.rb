@@ -15,12 +15,25 @@ $http = HTTPClient.new
 #Cuba.use LogRequest
 Cuba.use AllowIframe
 
+
+
 Cuba.define do
   on get do
     on "login" do
-
-      render("slogin")
+      render("login", layout: false)
     end
+
+    on "login2" do
+      render("slogin", layout: false)
+    end
+
+
+    on "hub" do
+      puts "HUB"
+      res.headers["Content-Type"]="text/html; charset=utf-8"
+      render("hub", layout: false)
+    end
+
     on "auth" do
       puts "/auth?code=#{req.params["code"]}"
 
