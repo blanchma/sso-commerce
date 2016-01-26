@@ -19,12 +19,24 @@ Cuba.use AllowIframe
 
 Cuba.define do
   on get do
+    on "set" do
+      render("set", layout: false)
+    end
+
+    on "get" do
+      render("get", layout: false)
+    end
+
+    on "store" do
+      render("store", layout: false)
+    end
+
     on "login" do
       render("login", layout: false)
     end
 
-    on "login2" do
-      render("slogin", layout: false)
+    on "register" do
+      render("register", layout: false)
     end
 
 

@@ -751,15 +751,10 @@ $(document).ready(function() {
   });
 
   storage.onConnect().then(function() {
-
     return storage.get('key');
-
   }).then(function(res) {
     console.log(res);
     storage.close();
-
-  }).then(function() {
-    console.log('end');
   });
 });
 

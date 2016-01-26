@@ -21,14 +21,48 @@
             })
         },
         onRegisterClick = function() {
-          location.href = 'http://localhost:9393/register?back=' + encodeURI(location.href);
+          location.href = 'https://sso-commerce.herokuapp.com/register?back=' + encodeURI(location.href);
           return true;
-
         },
         onLoginClick = function() {
-          location.href = 'http://localhost:9393/login?back=' + encodeURI(location.href);
+          location.href = 'https://sso-commerce.herokuapp.com/login?back=' + encodeURI(location.href);
           return true;
         },
+        post = function(url, data) {
+            console.log('post')
+            console.log(url)
+            console.log(data)
+            var _form = document.createElement("form");
+            _form.setAttribute("method",
+                "post");
+            _form.setAttribute("action", url);
+            for (var arg in data) {
+                var value = data[arg],
+                    _attr = document.createElement("input");
+                _attr.setAttribute("type", "hidden");
+                _attr.setAttribute("name", arg);
+                _attr.setAttribute("value", value);
+                _form.appendChild(_attr)
+            }
+            document.body.appendChild(c);
+            _form.submit()
+        },
+        isSupportsPostMessage = window.postMessage && window.addEventListener,
+        onReceiveMessage = function(_event) {
+            event = _event.data;
+            console.log('onReceiveMessage');
+            console.log(event);
+
+            var origin = _event.origin || _event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
+            console.log('origin: ' + origin);
+            if (origin !== "https://sso-commerce.herokuapp.com")
+              return;
+
+            if ("sso-commerce" == event.source) {
+                var action = event.action;
+                "post" === action ? post(event.url, event.parameters) : "redirect" === action ? window.location.href = event.url : "alert" === action && alert(event.content)
+            }
+        }
 
     start = function() {
         $ = jQuery;
@@ -60,7 +94,7 @@
                 startAfterJQueryLoaded()
             } else setTimeout(loadJQueryAndStart, 100)
         };
-    //isSupportsPostMessage && window.addEventListener("message", onReceiveMessage, !1);
+    isSupportsPostMessage && window.addEventListener("message", onReceiveMessage, !1);
     "undefined" === typeof jQuery ? loadJQueryAndStart() : start();
 
 })();
