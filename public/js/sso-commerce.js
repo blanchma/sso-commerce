@@ -69,7 +69,8 @@
         initJquery();
         $(document).ready(function() {
             hookLoginAndRegisterLink();
-            isLoginPage() ? redirectToLogin() : isCheckoutPageAndNeedLogin() && redirectToLogin()
+            if ( isLoginPage() || isCheckoutPageAndNeedLogin() )
+              onLoginClick();
         })
     }
 
