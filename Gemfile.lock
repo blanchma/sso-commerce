@@ -4,8 +4,8 @@ GEM
     bower (0.0.5)
       multi_json
     clap (1.0.0)
-    cuba (3.4.0)
-      rack
+    cuba (3.8.0)
+      rack (>= 1.6.0)
     cutest (1.2.3)
       clap
     daemons (1.2.3)
@@ -23,7 +23,7 @@ GEM
     multi_json (1.11.2)
     multi_xml (0.5.5)
     puma (2.15.3)
-    rack (1.4.1)
+    rack (1.6.4)
     rack-test (0.6.1)
       rack (>= 1.0)
     redic (1.5.0)

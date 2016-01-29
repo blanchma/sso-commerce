@@ -1,4 +1,5 @@
 require "erb"
+require "cuba"
 require "cuba/safe"
 require "cuba/render"
 
@@ -50,8 +51,8 @@ Cuba.define do
       puts "/auth?code=#{req.params["code"]}"
 
       response = $http.post("https://login.bigcommerce.com/oauth2/token",
-                          {client_id: 'cy8d21z8c50wopqadkixm4rbacv5bdp',
-                          client_secret: 'avzqq743oddpq5oe8gz54n66s7yrpma',
+                          {client_id: 'tlaonydhwjsqe7qigbh5zsg2pvhn9v9',
+                          client_secret: 'sr03dazzxc7kz10yk9ku51tzreamtmy',
                           code: req.params["code"],
                           scope: req.params["scope"],
                           grant_type: 'authorization_code',

@@ -751,7 +751,7 @@ $(document).ready(function() {
   });
 
   storage.onConnect().then(function() {
-    return storage.set('key', 'tute');
+    return storage.set('email', 'admin@avi-on.com');
   }).then(function(res) {
     console.log(res);
     storage.close();

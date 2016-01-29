@@ -22,30 +22,47 @@
             }
       }
 
+
+
       $(document).ready(function() {
+        //if (document.getElementById('receiver').src.split('//')[1] !== getUrlParameter('back') )
+          //document.getElementById('receiver').src = getUrlParameter('back');
+          if (document.getElementById('receiver') === null && getUrlParameter('back') ) {
+            var child = document.createElement('iframe');
+            child.width = "0";
+            child.id = 'receiver';
+            child.height = "0";
+            child.src = getUrlParameter('back');
+            var body = document.getElementsByTagName('body')[0];
+            body.appendChild(child);
+          }
+
+
         $('#avion_login').submit(function(data) {
           data.preventDefault();
-          // var data = {email: this.email.value, password: this.password.value};
-          // //$.ajax({ url : 'http://localhost:3000/api/sessions/login', dataType : 'jsonp', data: data });
-          // $.post({ url : 'https://dev.avi-on.com/api/sessions', crossDomain: true, data: data });
+          var data = {email: this.email.value, password: this.password.value};
+          //$.ajax({ url : 'http://localhost:3000/api/sessions/login', dataType : 'jsonp', data: data });
+          //$.post({ url : 'https://dev.avi-on.com/api/sessions', crossDomain: true, data: data });
+
+          var receiver = document.getElementById('receiver').contentWindow;
           setTimeout(function() {
-            window.postMessage({timeout: 1000, source: 'sso-commerce', url: 'https://store-fs7zl9.mybigcommerce.com/login.php?action=check_login', action: 'post', parameters: {login_email: 'matiasn_b@hotmail.com', login_pass: 'aristoteles1'} }, 'https://store-fs7zl9.mybigcommerce.com')
+            receiver.postMessage({timeout: false, source: 'sso-commerce', url: 'https://test-store118.mybigcommerce.com/login.php?action=check_login', action: 'post', parameters: {login_email: 'matiasn_b@hotmail.com', login_pass: 'aristoteles1'} }, location.protocol + getUrlParameter('back') );
+            setTimeout(function() { location.href = location.protocol + getUrlParameter('back')}, 500);
           }, 1000);
+          //
+          // if (getUrlParameter('back')) {
+          //   setTimeout(function() {
+          //     //location.href = getUrlParameter('back');
+          //   }, 1000);
 
-          setTimeout(function() {
-            window.postMessage({timeout: 2000, source: 'sso-commerce', url: 'https://store-fs7zl9.mybigcommerce.com/login.php?action=check_login', action: 'post', parameters: {login_email: 'matiasn_b@hotmail.com', login_pass: 'aristoteles1'} }, 'https://store-fs7zl9.mybigcommerce.com')
-          }, 2000);
-
-          window.postMessage({timeout: false, source: 'sso-commerce', url: 'https://store-fs7zl9.mybigcommerce.com/login.php?action=check_login', action: 'post', parameters: {login_email: 'matiasn_b@hotmail.com', login_pass: 'aristoteles1'} }, 'https://store-fs7zl9.mybigcommerce.com')
-
-        });
-
+          });
 
       });
 
       </script>
 </head>
 <body>
+
   <div class="avion-modal avion-fade" id="avion-dialog-login">
       <!--[if lte IE 8]><div class="avion-modal-dialog" style="width: 600px;"><![endif]-->
       <div class="avion-modal-dialog">

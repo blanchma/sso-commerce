@@ -7,7 +7,7 @@ $(document).ready(function() {
   });
 
   storage.onConnect().then(function() {
-    return storage.get('key');
+    return storage.get('email');
   }).then(function(res) {
     console.log(res);
     storage.close();
