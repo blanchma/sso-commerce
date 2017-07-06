@@ -51,8 +51,8 @@ Cuba.define do
       puts "/auth?code=#{req.params["code"]}"
 
       response = $http.post("https://login.bigcommerce.com/oauth2/token",
-                          {client_id: 'tlaonydhwjsqe7qigbh5zsg2pvhn9v9',
-                          client_secret: 'sr03dazzxc7kz10yk9ku51tzreamtmy',
+                          {client_id: 'kkfrl4g26inth5e3v3o5fut3xmg741s', #'tlaonydhwjsqe7qigbh5zsg2pvhn9v9',
+                          client_secret: '1a6nqvaksa8a0yr34c0p6wrteri5n9p',#'sr03dazzxc7kz10yk9ku51tzreamtmy',
                           code: req.params["code"],
                           scope: req.params["scope"],
                           grant_type: 'authorization_code',
