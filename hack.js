@@ -1,3 +1,41 @@
+<style>
+/* don’t display the button by default */
+.apple-pay-checkout-button {
+  display: none;
+}
+
+/* display the button if apple pay is supported */
+.apple-pay-supported .apple-pay-checkout-button {
+  display: inline-block;
+}
+
+/* renders a black background with white logo */
+.apple-pay-checkout-button {
+  background-size: 100% 60%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 5px;
+  padding: 0px;
+  box-sizing: border-box;
+  min-width: 175px;
+  min-height: 32px;
+  max-height: 64px;
+  background-image: -webkit-named-image(apple-pay-logo-white);
+  background-color: black;
+  text-indent: -9000em;
+  cursor: pointer;
+}
+
+/* for small screens, you should adjust the width of the button to
+   span the width of the containing block */
+@media screen and (max-width: 480px) {
+  .apple-pay-checkout-button {
+    width: 100%;
+    height: 60px;
+  }
+}
+</style>
+​
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></link>
@@ -24,12 +62,17 @@
     var locations = [], submitable = false;
     var $selectLocation, $inputEmail, $selectQty, $btnSubmit;
 
+
     $(document).ready(function() {
         $selectLocation = jQuery("#product-fields-2");
         $inputEmail = jQuery('#product-fields-1');
         $selectQty = jQuery("input[name='qty[]']");
         $btnSubmit = jQuery("button[type='submit']");
-        $selectLocation.hide();
+        if ($inputEmail.length === 0 ) {
+          return;
+        }
+
+        $selectLocation.parents(".form-field").hide();
         $selectLocation.change(updateAmount);
 
         $btnSubmit.click(function(evt) {
@@ -37,7 +80,10 @@
             return true;
           } else {
             evt.preventDefault();
-            if(locations) {
+            if($inputEmail.val() === '') {
+              toastr["error"]("Introduce an email");
+            }
+            else if(locations) {
               toastr["error"]("Choose a location");
             } else {
               toastr["error"]("Introduce an email");
@@ -52,10 +98,10 @@
             jQuery('#product-fields-1').val(email);
             fetchLicenceByEmail(email);
         }
-        jQuery('#product-fields-1').keyup(function() {
-            var email = $inputEmail.val();
-            fetchLicenceByEmail(email);
 
+        jQuery('#product-fields-1').bind("change keyup blur input", function() {
+            console.log('inputEmail event handler')
+            fetchLicenceByEmail($inputEmail.val());
         });
     });
 
@@ -85,15 +131,20 @@
     };
 
     var fetchLicenceByEmail = function fetchLicenceByEmail(email, success, fail) {
+        console.log('email.lenght', email.length);
+
+        if(email.length < 4) {
+          clean();
+          return;
+        }
         email = encodeURIComponent(email);
 
         jQuery.ajax({
             url: 'https://api-qa.avi-on.com/users/' + email + '/licence',
             dataType: 'json',
             beforeSend: function() {
-                $selectLocation.hide();
-                $selectLocation.html("");
-                submitable = false;
+                clean();
+                console.log('...searching...', email);
             },
             success: function(response) {
                 console.log('response', response);
@@ -107,15 +158,45 @@
                 });
 
                 $selectLocation.append(items);
-                $selectLocation.show();
+                $selectLocation.parents(".form-field").show()
+                $selectLocation.prop('disabled', false);
+
                 if (locations.size > 1) {
                   toastr["success"]('Choose a Location');
                 } else {
                   updateAmount();
                 }
+                $selectLocation.find("option:first").attr("selected", "selected");
             }
         }).fail(function(error) {
             toastr["error"]('Email not present in Avi-on');
         });
     };
+
+    var clean = function clean() {
+      $selectLocation.prop('disabled', true);
+      $selectLocation.html("");
+      $selectLocation.parents(".form-field").hide();
+      submitable = false;
+    };
+
+    var debounce = function debounce(func, wait, immediate) {
+      	var timeout;
+      	return function() {
+      		var context = this, args = arguments;
+      		var later = function() {
+      			timeout = null;
+      			if (!immediate) func.apply(context, args);
+      		};
+      		var callNow = immediate && !timeout;
+      		clearTimeout(timeout);
+      		timeout = setTimeout(later, wait || 200);
+      		if (callNow) { func.apply(context, args) };
+      	};
+    };
+
+    function submitable() {
+
+    }
+    var dFetchLicenceByEmail = debounce(fetchLicenceByEmail, 50);
 </script>​
