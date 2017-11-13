@@ -35,7 +35,7 @@
   }
 }
 </style>
-​
+
 <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></link>
@@ -100,7 +100,7 @@
         }
 
         jQuery('#product-fields-1').bind("change keyup blur input", function() {
-            console.log('inputEmail event handler')
+            console.log('inputEmail event handler');
             fetchLicenceByEmail($inputEmail.val());
         });
     });
@@ -110,8 +110,8 @@
       console.log('locationId', locationId);
       var location = $.grep(locations, function(location){ return location.id == locationId; })[0];
       console.log('location selected', location);
-      toastr["success"]('For ' + location.name + ' you need ' + location.devices + ' ' + (location.devices > 1 ? 'licences' : 'license') );
-      $selectQty.val(location.devices);
+      toastr["success"]('For ' + location.name + ' you need ' + location.licenses_required + ' ' + (location.licences_required > 1 ? 'licences' : 'license') );
+      $selectQty.val(location.licences_required);
       submitable = true;
     }
 
@@ -140,7 +140,7 @@
         email = encodeURIComponent(email);
 
         jQuery.ajax({
-            url: 'https://api-qa.avi-on.com/users/' + email + '/licence',
+            url: 'https://api.avi-on.com/users/' + email + '/licence',
             dataType: 'json',
             beforeSend: function() {
                 clean();
@@ -181,22 +181,23 @@
     };
 
     var debounce = function debounce(func, wait, immediate) {
-      	var timeout;
-      	return function() {
-      		var context = this, args = arguments;
-      		var later = function() {
-      			timeout = null;
-      			if (!immediate) func.apply(context, args);
-      		};
-      		var callNow = immediate && !timeout;
-      		clearTimeout(timeout);
-      		timeout = setTimeout(later, wait || 200);
-      		if (callNow) { func.apply(context, args) };
-      	};
+          var timeout;
+          return function() {
+              var context = this, args = arguments;
+              var later = function() {
+                  timeout = null;
+                  if (!immediate) func.apply(context, args);
+              };
+              var callNow = immediate && !timeout;
+              clearTimeout(timeout);
+              timeout = setTimeout(later, wait || 200);
+              if (callNow) { func.apply(context, args) };
+          };
     };
 
     function submitable() {
 
     }
     var dFetchLicenceByEmail = debounce(fetchLicenceByEmail, 50);
-</script>​
+</script>
+​
